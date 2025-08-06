@@ -1,6 +1,6 @@
 # TOTP验证码助手
 
-纯本地的TOTP验证码生成器浏览器扩展，由AI模型生成，参考了https://github.com/madrays/MoviePilot-Plugins项目的部分代码，感谢。
+纯本地的TOTP验证码生成器浏览器扩展，由AI模型生成，参考了 https://github.com/madrays/MoviePilot-Plugins 项目的部分代码，感谢。
 
 ## 功能特点
 
