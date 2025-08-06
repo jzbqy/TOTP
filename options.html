@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TOTP验证码助手</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 24px;
+    }
+    .site-form {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: #f9f9f9;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+      color: #555;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    textarea {
+      height: 60px;
+      resize: vertical;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 8px;
+    }
+    .btn-primary {
+      background: #007cba;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #005a87;
+    }
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    .btn-danger:hover {
+      background: #c82333;
+    }
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background: #545b62;
+    }
+    .site-list {
+      margin-top: 24px;
+    }
+    .site-item {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-info h3 {
+      margin: 0 0 8px 0;
+      color: #333;
+    }
+    .site-info p {
+      margin: 0;
+      color: #666;
+      font-size: 12px;
+    }
+    .site-actions button {
+      margin-left: 8px;
+    }
+    .help-text {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>TOTP验证码助手</h1>
+    
+    <div id="success-message" class="success-message"></div>
+    
+    <div style="margin-bottom: 24px; padding: 16px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+      <h2 style="margin: 0 0 16px 0;">数据管理</h2>
+      <button class="btn-secondary" id="export-btn">导出配置</button>
+      <button class="btn-secondary" id="import-btn">导入配置</button>
+      <button class="btn-secondary" id="import-qr-btn">导入二维码</button>
+      <button class="btn-secondary" id="import-google-btn">导入Google验证器</button>
+      <input type="file" id="import-file" accept=".json" style="display: none;">
+      <input type="file" id="import-qr-files" accept="image/*" multiple style="display: none;">
+      <input type="file" id="import-google-qr" accept="image/*" multiple style="display: none;">
+    </div>
+    
+    <div class="site-form">
+      <h2>添加新站点</h2>
+      <form id="site-form">
+        <div class="form-group">
+          <label for="site-name">站点名称</label>
+          <input type="text" id="site-name" placeholder="例如: GitHub" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="site-secret">TOTP密钥</label>
+          <input type="text" id="site-secret" placeholder="Base32格式的密钥" required>
+          <div class="help-text">
+            从二维码或设置页面获取的Base32格式密钥，例如: JBSWY3DPEHPK3PXP
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="site-domains">匹配域名</label>
+          <textarea id="site-domains" placeholder="每行一个域名，例如:&#10;github.com&#10;www.github.com"></textarea>
+          <div class="help-text">
+            插件会在这些域名的页面上自动显示验证码面板
+          </div>
+        </div>
+        
+        <button type="submit" class="btn-primary">添加站点</button>
+        <button type="button" class="btn-secondary" id="test-secret-btn">测试密钥</button>
+      </form>
+    </div>
+    
+    <div class="site-list">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center;">
+          <div style="width: 44px; margin-right: 8px;"></div>
+          <input type="checkbox" id="select-all" style="margin-right: 8px;">
+          <h2 style="margin: 0; white-space: nowrap;">已配置站点</h2>
+        </div>
+        <button class="btn-danger" id="delete-selected-btn">删除选中</button>
+      </div>
+      <div id="sites-container">
+        <p style="color: #666; text-align: center; padding: 20px;">暂无站点配置</p>
+      </div>
+    </div>
+    
+
+  </div>
+  
+  <script src="jsQR.js"></script>
+  <script src="totp.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

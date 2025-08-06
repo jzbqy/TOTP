@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 300px;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .header h1 {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin: 0;
+    }
+    
+    .settings-button {
+      background: none;
+      border: none;
+      color: #1976d2;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .codes-container {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .code-card {
+      background-color: white;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .site-name {
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .totp-code {
+      font-family: monospace;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin: 12px 0;
+      letter-spacing: 2px;
+    }
+    .progress-container {
+      margin: 8px 0;
+    }
+    .progress-bar {
+      height: 4px;
+      background: #eee;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #4caf50;
+      transition: width 1s linear;
+    }
+    .time-remaining {
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+      margin-top: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      background: #f5f5f5;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    button:hover {
+      background: #e5e5e5;
+    }
+    .add-site {
+      background: #007cba;
+      color: white;
+      border-color: #007cba;
+    }
+    .add-site:hover {
+      background: #005a87;
+    }
+    .empty-message {
+      text-align: center;
+      color: #666;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>TOTP验证码</h1>
+    <div class="header-actions">
+      <button id="settings-button" class="settings-button">设置</button>
+    </div>
+  </div>
+  
+  <div id="codes-container" class="codes-container"></div>
+  
+  <div id="loading" class="loading" style="display: none;">
+    <p>正在加载验证码...</p>
+  </div>
+  
+  <div id="add-form" style="display: none; margin-top: 16px; padding: 16px; border: 1px solid #ddd; border-radius: 8px;">
+    <h3 style="margin: 0 0 12px 0;">快速添加</h3>
+    <input type="text" id="quick-name" placeholder="站点名称" style="width: 100%; margin-bottom: 8px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+    <input type="text" id="quick-secret" placeholder="TOTP密钥" style="width: 100%; margin-bottom: 8px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+    <button id="quick-add-btn" style="background: #28a745; color: white; border: none; margin-right: 8px;">添加</button>
+    <button id="cancel-add-btn" style="background: #6c757d; color: white; border: none;">取消</button>
+  </div>
+  
+  <script src="totp.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "TOTP验证码助手",
+  "version": "1.0",
+  "description": "纯客户端TOTP验证码生成器，支持自动填充",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["totp.js", "content.js"]
+    }
+  ],
+  "permissions": [
+    "storage",
+    "clipboardWrite",
+    "tabs"
+  ]
+}

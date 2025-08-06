@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>测试页面</title>
+</head>
+<body>
+  <h1>扩展测试页面</h1>
+  <p>如果你能看到这个页面，说明扩展基本工作正常。</p>
+  <button onclick="testTOTP()">测试TOTP生成</button>
+  <div id="result"></div>
+  
+  <script src="totp.js"></script>
+  <script>
+    function testTOTP() {
+      try {
+        const code = TOTP.generateTOTP('JBSWY3DPEHPK3PXP');
+        document.getElementById('result').innerHTML = '测试验证码: ' + code;
+      } catch (error) {
+        document.getElementById('result').innerHTML = '错误: ' + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
